@@ -122,6 +122,24 @@ it is `reaction` regardless of how strongly the opinion is worded. (Two more
 documented boundary cases — `recommendation` vs `reaction`, and plot-question vs
 `reaction` — appear as the "uncertain example" under each label above.)
 
+**Real cases that gave me pause during annotation (Milestone 3):**
+
+1. *"…these episodes have broken my heart 💔 just mourning for all these poor
+   things. Poor stupid Zhou Tianyang and Qin Zheng…"* — `critique` vs `reaction`.
+   It discusses plot at length, but the function is grief/emotion about what
+   happened, not evaluation of a concrete aspect of the work. **Decided `reaction`.**
+   (This one was first mislabeled `critique`; a consistency check against my own
+   note caught it and it was corrected.)
+2. *"Cracking up at Coconut Boy Zhou Tianyang acting like those manipulative
+   concubines who want to bang their head against a pillar the moment their schemes
+   get exposed, choosing injury over accountability."* — `reaction` vs `critique`.
+   It starts as a laugh ("cracking up"), but the substance evaluates how the show
+   handles a recurring trope. **Decided `critique`** (concrete: the writing/acting
+   of a trope, with a judgment).
+3. *"Adding this to my watchlist immediately, the trailer gave me chills 😍"*
+   (boundary probe) — `recommendation` vs `reaction`. Personal viewing intent, not
+   steering others. **Decided `reaction`.**
+
 ## 4. Data collection plan
 
 **Where.** Comments are collected from r/CDrama via a browser-console script that
