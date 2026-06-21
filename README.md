@@ -17,9 +17,23 @@ against a zero-shot Groq `llama-3.3-70b-versatile` baseline on a held-out test s
 | `reaction` | An emotional, in-the-moment response — feelings, gushing, jokes, plot venting, vague/global like-dislike — with no concrete aspect and no intent to recommend. |
 | `recommendation` | Mainly steers **other people's** viewing — recommend, warn off, or endorse so others watch. Personal "adding to my watchlist" intent does not count. |
 
+**Two examples per label:**
+- `critique`: *"The dubbing is out of sync by half a second and the rushed cuts make
+  the characters' decisions feel like a summary."* · *"Li Yitong has the range to do
+  more serious roles; this seems a lighter drama and the plot is rather obvious."*
+- `reaction`: *"I'm still getting distracted by how beautiful Deng Wei is 😭."* ·
+  *"Why is Ding Yuxi playing a villain so attractive?"*
+- `recommendation`: *"Best series I've watched in years — go watch this one."* ·
+  *"Here's our unofficial sub starter package so you find more dramas to watch."*
+
 The boundary is resolved with an ordered decision rule (strip actor-thirst → steer
 others? → concrete aspect + judgment? → else reaction). Full rule and edge cases in
 [planning.md](planning.md).
+
+**Why this community:** I watch C-dramas daily and know the shows and actors being
+discussed, so I can label borderline comments the way an actual participant reads
+them. r/CDrama is also a good classification target because the same thread genuinely
+mixes all three discourse types, and no single type trivially dominates.
 
 ## Data
 
@@ -70,6 +84,17 @@ others? → concrete aspect + judgment? → else reaction). Full rule and edge c
 ## Evaluation Report
 
 Both models scored on the **same 37-example test set**.
+
+### Baseline description
+
+The baseline is **Groq `llama-3.3-70b-versatile`, zero-shot** (no task-specific
+training). It received a system prompt containing the same three label definitions
+and the ordered decision rule from this README, plus one example per label, and was
+instructed to **output only the single lowercase label word**. Each of the 37 test
+comments was sent as a separate user message; the notebook parsed the one-word reply
+and matched it against the label strings. **0% of responses were unparseable**, so no
+prompt revision was needed. This establishes how hard the task is for a strong
+general model with no training.
 
 ### Overall
 
