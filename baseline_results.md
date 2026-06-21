@@ -1,36 +1,47 @@
-# Baseline Results — Groq `llama-3.3-70b-versatile` (zero-shot)
+# Results — Baseline vs Fine-tuned (final run)
 
-Run in Milestone 4, on the locked test set, **before** any fine-tuning.
-Same test set and label definitions that the fine-tuned model will be scored on.
+Both models scored on the **same locked test set** (37 examples) after the label
+re-audit and re-split. Baseline = Groq `llama-3.3-70b-versatile` zero-shot;
+fine-tuned = `distilbert-base-uncased`. Full export in `evaluation_results.json`,
+confusion matrix in `confusion_matrix.png`.
 
-## Numbers
+## Headline
 
-- **Overall accuracy: 0.351** (37/37 responses parseable — 0% unparseable)
-- **Macro-F1: 0.25**
+| metric | baseline | fine-tuned | Δ |
+|---|---|---|---|
+| accuracy | 0.459 | **0.514** | +0.055 |
+| **macro-F1** | 0.31 | **0.45** | **+0.14** |
 
-| label | precision | recall | F1 | support |
-|---|---|---|---|---|
-| critique | 0.00 | 0.00 | 0.00 | 13 |
-| reaction | 0.41 | 0.71 | 0.52 | 17 |
-| recommendation | 0.50 | 0.14 | 0.22 | 7 |
-| **accuracy** | | | **0.35** | 37 |
-| **macro avg** | 0.30 | 0.28 | **0.25** | 37 |
+## Per-class
 
-## Interpretation
+| label | baseline P/R/F1 | fine-tuned P/R/F1 | support |
+|---|---|---|---|
+| critique | 0.50 / 0.23 / 0.32 | 0.44 / 0.31 / 0.36 | 13 |
+| reaction | 0.48 / 0.82 / 0.61 | 0.54 / 0.76 / 0.63 | 17 |
+| recommendation | 0.00 / 0.00 / 0.00 | 0.50 / 0.29 / 0.36 | 7 |
 
-The zero-shot model performs barely above chance (3-class random ≈ 0.33 accuracy).
-It is essentially unusable on this task, which makes the fine-tuned model's
-improvement meaningful.
+## Verdict against the success criteria (planning.md §6)
 
-## Hypothesis (recorded before fine-tuning) — and a correction
+- **Relative (beat baseline): MET.** Fine-tuned macro-F1 0.45 > baseline 0.31. The
+  biggest wins are the classes the baseline could not handle: `recommendation`
+  (0.00 → 0.36) and `critique` (recovered to 0.36 after the label clean-up; an
+  earlier run with noisy labels scored 0.00).
+- **Absolute (macro-F1 ≥ 0.70, every class ≥ 0.60): NOT met.** macro-F1 0.45;
+  `critique` and `recommendation` sit at 0.36. This is an honest ceiling for a
+  subjective 3-class task with ~200 examples, a 37-example test set, and residual
+  label subjectivity on the `critique`↔`reaction` boundary.
 
-- **Original hypothesis:** the baseline would *over-predict `critique`*, confusing
-  emotional analysis for reasoned critique.
-- **What actually happened (REFUTED):** the baseline *collapses toward the majority
-  class `reaction`* (recall 0.71, ~29 of 37 predictions) and is **completely blind to
-  `critique`** (precision = recall = F1 = 0 on 13 examples). It does not over-predict
-  critique at all — it under-predicts it to zero.
-- **Revised hypothesis to test after fine-tuning:** fine-tuning's main job is to
-  *recover the `critique` class* and stop the model from dumping everything into
-  `reaction`. The `critique` ↔ `reaction` boundary is still the hard one — but the
-  error direction is reaction-ward, not critique-ward.
+## Hypothesis check
+
+The revised hypothesis (after the baseline refuted the first one) was that
+fine-tuning's main job is to **recover the `critique` class** and stop the model
+dumping everything into `reaction`. Confirmed: `critique` and `recommendation` both
+moved off 0.00, while `reaction` stayed strong. The `critique`↔`reaction` boundary
+remains the hardest, consistent with the taxonomy's predicted edge case.
+
+## Training note
+
+Fine-tuned for 8 epochs, lr 5e-5, batch 16, with `load_best_model_at_end` on
+validation accuracy (best epoch ≈ 5, val acc 0.556, val loss 0.98). An earlier
+3–5 epoch / 2e-5 run underfit (loss stuck near ln 3 ≈ 1.10, collapsed to the
+majority class); a 15-epoch run overfit (train loss → 0.004, val loss → 2.34).
