@@ -1,0 +1,32 @@
+# Secrets — never commit API keys (Groq key lives in Colab Secrets, not here)
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+venv/
+.venv/
+env/
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Large model artifacts (download from Colab if needed, don't commit)
+*.bin
+*.safetensors
+*.pt
+*.ckpt
+checkpoint-*/
+results/
+logs/
+
+# NOTE: deliverables ARE committed on purpose — do not ignore these:
+#   planning.md, README.md, the dataset CSV,
+#   evaluation_results.json, confusion_matrix.png
