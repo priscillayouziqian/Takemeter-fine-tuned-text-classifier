@@ -1,5 +1,7 @@
 # TakeMeter — A Discourse-Quality Classifier for r/CDrama
 
+📺 **Video walkthrough:** https://www.youtube.com/watch?v=znXaaotyslQ
+
 TakeMeter is a fine-tuned text classifier that sorts comments from the
 [r/CDrama](https://www.reddit.com/r/CDrama/) subreddit (fans of Chinese dramas) into
 three discourse types. It was built by defining a label taxonomy, hand-collecting and
@@ -212,23 +214,3 @@ function: flat-toned critiques and reasoned-sounding emotional reactions.
    over-fitting from the loss curves) and scripted the data merge/cleanup; I made
    every labeling and hyperparameter decision.
 
-## Repo Structure & How to Run
-
-```
-planning.md             design spec (labels, edge cases, metrics, AI plan)
-labeled_data.csv        242 hand-labeled comments (text, label, notes)
-baseline_results.md     baseline-vs-fine-tuned results summary
-evaluation_results.json metrics exported from the notebook
-confusion_matrix.png    fine-tuned confusion matrix (image)
-```
-
-To reproduce: open the TakeMeter starter Colab notebook (T4 GPU), upload
-`labeled_data.csv` in Section 1, run Sections 1–2 (split/tokenize), add a Groq key +
-the prompt in Section 5 (baseline), then Sections 3–4 (fine-tune with epochs=8,
-lr=5e-5) and 6 (compare + export).
-
-## Demo
-
-3–5 minute walkthrough: _[video link to be added]_ — shows 3–5 live classifications
-with label + confidence, one narrated correct prediction, one narrated incorrect
-prediction, and a tour of this evaluation report.
